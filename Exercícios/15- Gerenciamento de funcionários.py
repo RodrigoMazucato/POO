@@ -1,23 +1,26 @@
-class Funcionario:
+from abc import ABC, abstractmethod
+class Funcionario(ABC):
     bonus = 10 # porcento
     def __init__(self, nome: str, id: int, salario: float) -> None:
         self.nome = nome
         self.id = id
         self.salario = salario
-        self.bonificacao = self.salario * (1 + self.bonus/100)
+        self.bonificacao = 0
 
     def mostrar_detalhes(self) -> str:
-        return f'Nome: {self.nome} | Id: {self.id} | Salário: R$ {self.salario:.2f}'
+        return f'{type(self).__name__}: {self.nome} | Id: {self.id} | Salário: R$ {self.salario:.2f}'
 
+    @abstractmethod
     def calcular_bonificacao(self) -> str:
-        return f'Bonificação: R$ {self.bonificacao:.2f}'
+        pass
         
 class Gerente(Funcionario):
     bonus = 100 # reais
     def __init__(self, nome: str, id: int, salario: float) -> None:
         super().__init__(nome, id, salario)
         self.equipe = []
-    
+        Departamento.gerentes.append(self)
+
     def adicionar_funcionario(self, func: Funcionario) -> None:
         self.equipe.append(func)
         print(f'Funcionário(a) {func.nome} adicionado com sucesso!')
@@ -30,14 +33,15 @@ class Gerente(Funcionario):
             print(f'O(A) funcionário(a) {func.nome} não está na equipe!')
 
     def calcular_bonificacao(self) -> str:
-        bonificacao = self.salario + len(self.equipe) * self.bonus
-        return f'Bonificação: R$ {bonificacao:.2f}'
+        self.bonificacao = len(self.equipe) * self.bonus
+        return f'Bonificação: R$ {self.salario + self.bonificacao:.2f}'
 
 class Engenheiro(Funcionario):
     bonus = 20 # porcento
     def __init__(self, nome: str, id: int, salario: float, departamento: str) -> None:
         super().__init__(nome, id, salario)
         self.departamento = departamento
+        Departamento.engenheiros.append(self)
 
     def detalhes_departamento(self) -> str:
         match self.departamento.lower():
@@ -58,27 +62,63 @@ class Engenheiro(Funcionario):
             
             case _:
                 return 'Departamento não cadastrado!'
+
+    def calcular_bonificacao(self) -> str:
+        self.bonificacao = self.salario * (self.bonus/100)
+        return f'Bonificação: R$ {self.salario + self.bonificacao:.2f}'
+
+class Departamento:
+    gerentes = []
+    engenheiros = []
+    total = 0
+    bonificacao = 0
+
+    def calcular_salario_total(self) -> str:
+        
+        for item in self.gerentes:
+            self.total += item.salario
+
+        for item in self.engenheiros:
+            self.total += item.salario
+
+        return f'Salário total: R$ {self.total:.2f}'
+    
+    def calcular_total_bonificacao(self) -> str:
+        for item in self.gerentes:
+            self.bonificacao += item.bonificacao
+
+        for item in self.engenheiros:
+            self.bonificacao += item.bonificacao
+
+        return f'Bonificação total: R$ {self.bonificacao:.2f}\nBonificação com salário: R$ {self.total + self.bonificacao:.2f}'
+
+
 def main():
-    f1 = Funcionario('João', 3847, 3000.00)
-    f2 = Funcionario('Maria', 5870, 3100.00)
-    f3 = Funcionario('José', 2763, 2500.00)
+    dep = Departamento()
+    e1 = Engenheiro('João', 3847, 3000.00, 'Testes')
+    e2 = Engenheiro('Maria', 5870, 3100.00, 'Infraestrutura')
+    e3 = Engenheiro('José', 2763, 2500.0, 'Suporte')
+    e4 = Engenheiro('Daniel', 5678, 3500.00, 'Desenvolvimento')
     g1 = Gerente('Rodrigo', 1234, 4500.00)
-    e1 = Engenheiro('Daniel', 5678, 3500.00, 'desenvolvimento')
 
-    g1.adicionar_funcionario(f1)
-    g1.adicionar_funcionario(f2)
-    g1.adicionar_funcionario(e1)
-
-    print(f1.mostrar_detalhes())
-    print(f1.calcular_bonificacao())
     print(g1.mostrar_detalhes())
-    print(g1.calcular_bonificacao())
+    g1.adicionar_funcionario(e1)
+    g1.adicionar_funcionario(e2)
+    g1.adicionar_funcionario(e3)
+
     print(e1.mostrar_detalhes())
     print(e1.calcular_bonificacao())
+    print(e2.mostrar_detalhes())
+    print(e2.calcular_bonificacao())
+    print(e3.mostrar_detalhes())
+    print(e3.calcular_bonificacao())
 
-    g1.remover_funcionario(f1)
-    g1.remover_funcionario(f3)
+    g1.remover_funcionario(e1)
+    g1.remover_funcionario(e4)
 
-    print(e1.detalhes_departamento())
+    print(e4.detalhes_departamento())
+
+    print(dep.calcular_salario_total())
+    print(dep.calcular_total_bonificacao())
 
 main()
