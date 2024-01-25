@@ -34,7 +34,7 @@ class Gerente(Funcionario):
 
     def calcular_bonificacao(self) -> str:
         self.bonificacao = len(self.equipe) * self.bonus
-        return f'Bonificação: R$ {self.salario + self.bonificacao:.2f}'
+        return f'Bonificação: R$ {self.salario + self.bonificacao:.2f} (+ R$ {self.bonificacao:.2f})'
 
 class Engenheiro(Funcionario):
     bonus = 20 # porcento
@@ -65,7 +65,7 @@ class Engenheiro(Funcionario):
 
     def calcular_bonificacao(self) -> str:
         self.bonificacao = self.salario * (self.bonus/100)
-        return f'Bonificação: R$ {self.salario + self.bonificacao:.2f}'
+        return f'Bonificação: R$ {self.salario + self.bonificacao:.2f} (+ R$ {self.bonificacao:.2f})'
 
 class Departamento:
     gerentes = []
