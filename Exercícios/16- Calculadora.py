@@ -1,18 +1,7 @@
 from abc import ABC, abstractmethod
 class Calculadora(ABC):
-    def __init__(self, usuario: str) -> None:
-        self.__usuario = usuario
-    
-    @property
-    def usuario(self):
-        return self.__usuario
-    
-    @usuario.setter
-    def usuario(self, novo):
-        self.__usuario = novo
-
     @abstractmethod
-    def calcular(self, a, b):
+    def calcular(self, a: float, b: float) -> str:
         pass
 
 class Soma(Calculadora):
