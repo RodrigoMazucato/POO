@@ -5,16 +5,16 @@ class Calculadora(ABC):
         pass
 
 class Soma(Calculadora):
-    def calcular(self, a: float, b: float) -> str:
-        return f'Soma: {a} + {b} = {a + b}'
+    def calcular(self, a: float, b: float) -> None:
+        print(f'Soma: {a} + {b} = {a + b}')
     
 class Subtracao(Calculadora):
-    def calcular(self, a: float, b: float) -> str:
-        return f'Subtração: {a} - {b} = {a - b}'
+    def calcular(self, a: float, b: float) -> None:
+        print(f'Subtração: {a} - {b} = {a - b}')
     
 class Multiplicacao(Calculadora):
-    def calcular(self, a: float, b: float) -> str:
-        return f'Multiplicação: {a} x {b} = {a * b}'
+    def calcular(self, a: float, b: float) -> None:
+        print(f'Multiplicação: {a} x {b} = {a * b}')
     
 class Divisao(Calculadora):
     def teste_vazio(self, a: any, b: any) -> None:
@@ -26,10 +26,26 @@ class Divisao(Calculadora):
             self.teste_vazio(a,b)
             resultado = a / b
         except ZeroDivisionError:
-            print('Não pode dividir por zero!')
+            print('Não é possível dividir por zero!')
         except TypeError:
             print('Operação inválida!')
         else:
-            print('Divisão: {a} / {b} = {a / b}')
+            print(f'Divisão: {a} / {b} = {a / b}')
         finally:
             print('Fim de operação!')
+
+def main():
+    soma = Soma()
+    soma.calcular(3, 4)
+
+    subtracao = Subtracao()
+    subtracao.calcular(5, 2)
+
+    mult = Multiplicacao()
+    mult.calcular(4, 6)
+
+    div = Divisao()
+    div.calcular(10, 2)
+    div.calcular(10, 0)
+    div.calcular('',10)
+main()
