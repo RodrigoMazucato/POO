@@ -28,7 +28,7 @@ class Multiplicacao(Calculadora):
         return f'Multiplicação: {a} x {b} = {a * b}'
     
 class Divisao(Calculadora):
-    def teste_vazio(self, a: float, b: float):
+    def teste_vazio(self, a: any, b: any) -> None:
         if a == '' or b == '':
             raise TypeError
         
