@@ -1,4 +1,8 @@
 from abc import ABC, abstractmethod
+
+class CampoVazioError(Exception):
+    pass
+
 class Calculadora(ABC):
     @abstractmethod
     def calcular(self, a: float, b: float) -> str:
@@ -19,7 +23,7 @@ class Multiplicacao(Calculadora):
 class Divisao(Calculadora):
     def teste_vazio(self, a: any, b: any) -> None:
         if a == '' or b == '':
-            raise TypeError
+            raise CampoVazioError
         
     def calcular(self, a: float, b: float) -> str:
         try:
@@ -29,6 +33,8 @@ class Divisao(Calculadora):
             print('Não é possível dividir por zero!')
         except TypeError:
             print('Operação inválida!')
+        except CampoVazioError:
+            print('O campo não pode ficar vazio!')
         else:
             print(f'Divisão: {a} / {b} = {a / b}')
         finally:
